@@ -201,32 +201,32 @@ namespace ARMClient
 
         static void PrintUsage()
         {
-            Console.WriteLine("CSMClient supports getting token and simple Http CSM resources.");
-            Console.WriteLine("Source codes are available at https://github.com/suwatch/CSMClient.");
+            Console.WriteLine("ARMClient supports getting token and simple Http ARM resources.");
+            Console.WriteLine("Source codes are available at https://github.com/projectkudu/ARMClient.");
 
             Console.WriteLine();
             Console.WriteLine("Login and get tokens");
-            Console.WriteLine("    CSMClient.exe login ([Prod|Current|Dogfood|Next])");
+            Console.WriteLine("    ARMClient.exe login");
 
             Console.WriteLine();
-            Console.WriteLine("Call CSM api");
-            Console.WriteLine("    CSMClient.exe [get|post|put|delete] [url] (-content:<file>)");
+            Console.WriteLine("Call ARM api");
+            Console.WriteLine("    ARMClient.exe [get|post|put|delete] [url] (-content:<file>)");
 
             Console.WriteLine();
             Console.WriteLine("Copy token to clipboard");
-            Console.WriteLine("    CSMClient.exe token [tenant|subscription]");
+            Console.WriteLine("    ARMClient.exe token [tenant|subscription]");
 
             //Console.WriteLine();
             //Console.WriteLine("Copy token by ServicePrincipalName to clipboard");
-            //Console.WriteLine("    CSMClient.exe spn [tenant] [appId] [appKey] ([Prod|Current|Dogfood|Next])");
+            //Console.WriteLine("    ARMClient.exe spn [tenant] [appId] [appKey]");
 
             Console.WriteLine();
             Console.WriteLine("List token cache");
-            Console.WriteLine("    CSMClient.exe listcache");
+            Console.WriteLine("    ARMClient.exe listcache");
 
             Console.WriteLine();
             Console.WriteLine("Clear token cache");
-            Console.WriteLine("    CSMClient.exe clearcache");
+            Console.WriteLine("    ARMClient.exe clearcache");
         }
 
         static async Task HttpInvoke(Uri uri, AuthenticationResult authResult, string verb, bool addOutputColor, string payload)
@@ -234,7 +234,7 @@ namespace ARMClient
             using (var client = new HttpClient(new HttpLoggingHandler(new HttpClientHandler(), addOutputColor)))
             {
                 client.DefaultRequestHeaders.Add("Authorization", authResult.CreateAuthorizationHeader());
-                client.DefaultRequestHeaders.Add("User-Agent", "CSMClient-" + Environment.MachineName);
+                client.DefaultRequestHeaders.Add("User-Agent", "ARMClient-" + Environment.MachineName);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
 
                 if (IsRdfe(uri))

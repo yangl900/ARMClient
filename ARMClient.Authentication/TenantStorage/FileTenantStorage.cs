@@ -40,15 +40,13 @@ namespace ARMClient.Authentication.TenantStorage
             var filePath = GetCacheFile();
             if (File.Exists(filePath))
             {
-                Trace.WriteLine(string.Format("Deleting {0} ... ", filePath));
                 File.Delete(filePath);
-                Trace.WriteLine("Done!");
             }
         }
 
         private static string GetCacheFile()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".csm");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm");
             Directory.CreateDirectory(path);
             return Path.Combine(path, "cache_tenants.dat");
         }

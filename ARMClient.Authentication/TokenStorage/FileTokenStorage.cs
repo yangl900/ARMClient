@@ -69,22 +69,20 @@ namespace ARMClient.Authentication.TokenStorage
             var filePaths = new[] { GetCacheFile(), GetRecentTokenFile() };
             foreach (var filePath in filePaths.Where(File.Exists))
             {
-                Trace.WriteLine(string.Format("Deleting {0} ... ", filePath));
                 File.Delete(filePath);
-                Trace.WriteLine("Done!");
             }
         }
 
         private static string GetCacheFile()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".csm");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm");
             Directory.CreateDirectory(path);
             return Path.Combine(path, "cache_tokens.dat");
         }
 
         private static string GetRecentTokenFile()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".csm");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm");
             Directory.CreateDirectory(path);
             return Path.Combine(path, "recent_token.dat");
         }

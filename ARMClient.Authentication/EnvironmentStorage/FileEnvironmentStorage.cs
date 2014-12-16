@@ -16,7 +16,7 @@ namespace ARMClient.Authentication.EnvironmentStorage
         {
             try
             {
-                var file = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".csm"), "recent_env.txt");
+                var file = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm"), "recent_env.txt");
                 return (AzureEnvironments)Enum.Parse(typeof(AzureEnvironments), File.ReadAllText(file));
             }
             catch
@@ -35,15 +35,13 @@ namespace ARMClient.Authentication.EnvironmentStorage
             var filePath = GetFilePath();
             if (File.Exists(filePath))
             {
-                Trace.WriteLine(string.Format("Deleting {0} ... ", filePath));
                 File.Delete(filePath);
-                Trace.WriteLine("Done!");
             }
         }
 
         private static string GetFilePath()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".csm");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm");
             Directory.CreateDirectory(path);
             return Path.Combine(path, "recent_env.txt");
         }
