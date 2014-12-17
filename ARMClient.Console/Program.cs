@@ -82,6 +82,8 @@ namespace ARMClient
                         Console.WriteLine();
                         DumpClaims(authResult.AccessToken);
                         Console.WriteLine();
+                        Console.WriteLine("Expires: " + authResult.ExpiresOn.ToLocalTime().ToString("o"));
+                        Console.WriteLine();
                         Console.WriteLine("Token copied to clipboard successfully.");
                         return 0;
                     }
@@ -98,14 +100,8 @@ namespace ARMClient
                             string tenantId = Guid.Parse(args[1]).ToString();
                             string appId = Guid.Parse(args[2]).ToString();
                             string appKey = args[3];
-                            var authResult = persistentAuthHelper.GetTokenBySpn(tenantId, appId, appKey, env);
-                            var bearer = authResult.CreateAuthorizationHeader();
-                            Clipboard.SetText(bearer);
-                            Console.WriteLine(bearer);
-                            Console.WriteLine();
-                            DumpClaims(authResult.AccessToken);
-                            Console.WriteLine();
-                            Console.WriteLine("Token copied to clipboard successfully.");
+                            persistentAuthHelper.SetEnvironment(env);
+                            var authResult = persistentAuthHelper.GetTokenBySpn(tenantId, appId, appKey).Result;
                             return 0;
                         }
                     }
@@ -216,9 +212,9 @@ namespace ARMClient
             Console.WriteLine("Copy token to clipboard");
             Console.WriteLine("    ARMClient.exe token [tenant|subscription]");
 
-            //Console.WriteLine();
-            //Console.WriteLine("Copy token by ServicePrincipalName to clipboard");
-            //Console.WriteLine("    ARMClient.exe spn [tenant] [appId] [appKey]");
+            Console.WriteLine();
+            Console.WriteLine("Get token by ServicePrincipalName");
+            Console.WriteLine("    ARMClient.exe spn [tenant] [appId] [appKey]");
 
             Console.WriteLine();
             Console.WriteLine("List token cache");

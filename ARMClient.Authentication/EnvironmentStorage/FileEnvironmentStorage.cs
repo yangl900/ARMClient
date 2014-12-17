@@ -2,27 +2,28 @@
 using System.Diagnostics;
 using System.IO;
 using ARMClient.Authentication.Contracts;
+using ARMClient.Authentication.Utilities;
 
 namespace ARMClient.Authentication.EnvironmentStorage
 {
     class FileEnvironmentStorage : IEnvironmentStorage
     {
+        private const string _fileName = "recent_env.txt";
+
         public void SaveEnvironment(AzureEnvironments azureEnvironment)
         {
-            File.WriteAllText(GetFilePath(), azureEnvironment.ToString());
+            File.WriteAllText(ProtectedFile.GetCacheFile(_fileName), azureEnvironment.ToString());
         }
 
         public AzureEnvironments GetSavedEnvironment()
         {
-            try
+            var file = ProtectedFile.GetCacheFile(_fileName);
+            if (File.Exists(file))
             {
-                var file = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm"), "recent_env.txt");
                 return (AzureEnvironments)Enum.Parse(typeof(AzureEnvironments), File.ReadAllText(file));
             }
-            catch
-            {
-                return AzureEnvironments.Prod;
-            }
+
+            return AzureEnvironments.Prod;
         }
 
         public bool IsCacheValid()
@@ -32,18 +33,11 @@ namespace ARMClient.Authentication.EnvironmentStorage
 
         public void ClearSavedEnvironment()
         {
-            var filePath = GetFilePath();
+            var filePath = ProtectedFile.GetCacheFile(_fileName);
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
-        }
-
-        private static string GetFilePath()
-        {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".arm");
-            Directory.CreateDirectory(path);
-            return Path.Combine(path, "recent_env.txt");
         }
     }
 }
