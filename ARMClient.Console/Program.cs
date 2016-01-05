@@ -136,7 +136,8 @@ namespace ARMClient
                         || String.Equals(verb, "delete", StringComparison.OrdinalIgnoreCase)
                         || String.Equals(verb, "put", StringComparison.OrdinalIgnoreCase)
                         || String.Equals(verb, "post", StringComparison.OrdinalIgnoreCase)
-                        || String.Equals(verb, "patch", StringComparison.OrdinalIgnoreCase))
+                        || String.Equals(verb, "patch", StringComparison.OrdinalIgnoreCase)
+                        || String.Equals(verb, "capture", StringComparison.OrdinalIgnoreCase))
                     {
                         var path = _parameters.Get(1, keyName: "url");
                         var verbose = _parameters.Get("-verbose", requires: false) != null || Utils.GetDefaultVerbose();
@@ -145,7 +146,19 @@ namespace ARMClient
                             Trace.Listeners.Clear();
                         }
 
+
                         var uri = EnsureAbsoluteUri(path, persistentAuthHelper);
+
+                        if (verb.Equals("capture", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            var newUri = new UriBuilder(uri);
+                            newUri.Host = "azcapture.azurewebsites.net";
+                            newUri.Path = newUri.Path + "/capture";
+
+                            uri = newUri.Uri;
+                            verb = "post";
+                        }
+
                         var env = GetAzureEnvironments(uri, persistentAuthHelper);
                         if (!persistentAuthHelper.IsCacheValid() || persistentAuthHelper.AzureEnvironments != env)
                         {
